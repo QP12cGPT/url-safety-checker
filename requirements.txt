@@ -1,0 +1,77 @@
+httpx[http2]==0.28.1
+tldextract==5.3.0
+dnspython==2.7.0
+cryptography==45.0.6
+python-dotenv==1.0.1
+playwright==1.46.0
+
+🚀 使い方
+軽量版（一次ふるい）
+
+python url_guard.py https://example.com
+
+出力例：
+
+{
+  "status": "PASS",
+  "score": 0,
+  "reasons": [],
+  "gsb": false,
+  ...
+}
+
+挙動観測版（深掘り）
+
+python behavior_check.py https://www.temu.com/jp
+
+出力例（標準出力）：
+
+{
+  "verdict": "WARN",
+  "score": 2,
+  "reasons": ["重要セキュリティヘッダー不足: content-security-policy"],
+  "json": "reports/20250812-190816_temu.json",
+  "md":   "reports/20250812-190816_temu.md"
+}
+
+reports/ に詳細レポートが保存されます。
+
+🧪 判定の読み方（ざっくり）
+PASS：現時点で大きな赤旗はなし（=無条件で安全ではない）
+
+WARN：要注意。詳細レポートで送信先やヘッダーを確認
+
+BLOCK：強い赤旗。アクセス/支払いは避ける
+
+❗限界と注意
+端末側の悪質拡張/マルウェアは検知できません
+
+偽アプリやオーバーレイ偽フォームの完全自動検知は困難
+
+自動操作がBot対策で止まることがあります（その場合は手動補助かルール調整）
+
+法的にグレーなテストはしないでください。自分の責任で、ダミーデータで試験してください
+
+🔧 トラブルシュート
+"gsb": null のまま
+
+.env の GSB_API_KEY が読み込めていない可能性
+
+python-dotenv の導入や .env の位置を確認
+
+Google Cloud の API制限で「Safe Browsing API のみに制限」に
+
+Playwrightが起動しない
+
+python -m playwright install chromium を再実行
+
+権限エラーの場合は管理者シェルで実行
+
+判定が厳しすぎる/緩すぎる
+
+PSP_ALLOW / THIRD_PARTY_SOFT_ALLOW / PII_KEYS を運用に合わせて調整
+
+📮 質問・改善提案
+使い方で困ったら GitHub Issues へ
+
+note から来た方は、noteの記事コメントでもOK
